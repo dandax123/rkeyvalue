@@ -1,2 +1,2 @@
 # rkeyvalue
-A distributed key-value system in rust.
+A distributed key-value store in rust.
