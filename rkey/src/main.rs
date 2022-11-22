@@ -1,3 +1,46 @@
-fn main() {
-    println!("Hello, world!");
+mod servers;
+use actix_web::{get, post, web, App, HttpResponse, HttpServer, Responder};
+use std::env;
+// use clap::Parser;
+
+use servers::{master, volume};
+
+/// Simple program to greet a person
+// #[derive(Parser, Debug)]
+// #[command(author, version, about, long_about = None)]
+// struct Args {
+//     /// Name of the person to greet
+//     #[arg(short, long, default_value_t=String::new("master"))]
+//     name: String,
+
+//     /// Number of times to greet
+//     #[arg(short, long, default_value_t = 3000)]
+//     port: u16,
+// }
+
+#[actix_web::main]
+async fn main() -> std::io::Result<()> {
+    let args: Vec<String> = env::args().collect();
+
+    let service_type = args
+        .get(1)
+        .expect("Usage cargo run [master|volume]")
+        .to_owned();
+
+    let service_port: u16 = args
+        .get(2)
+        .expect(format!("Provide port for the {}", service_type).as_str())
+        .parse()
+        .unwrap();
+
+    HttpServer::new(move || {
+        App::new().configure(if (service_type == "master") {
+            master::master_service
+        } else {
+            volume::volume_service
+        })
+    })
+    .bind(("127.0.0.1", service_port))?
+    .run()
+    .await
 }
