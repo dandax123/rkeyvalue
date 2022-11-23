@@ -8,3 +8,4 @@ edition = "2021"
 [dependencies]
 actix-web = "4"
 clap = { version = "4.0.26", features = ["derive"] }
+rusty-leveldb = "1.0.4"
