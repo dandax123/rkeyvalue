@@ -1,20 +1,19 @@
 use rusty_leveldb::{DBIterator, LdbIterator, Options, DB};
 
-use crate::STORAGE_SERVICE;
-
-struct LevelDB {
+pub struct LevelDB {
     pub db: DB,
 }
 
+pub struct DBValue {
+    key: String,
+    volume: String,
+}
 impl LevelDB {
-    pub(crate) fn new(DB_PATH: &str) -> Self {
-        println!("cool");
-
+    pub(crate) fn new(db_path: &str) -> Self {
         let mut opt = Options::default();
         opt.error_if_exists = false;
-        let mut db = DB::open(DB_PATH, opt).unwrap();
-        println!("sucess ");
-
+        let mut db = DB::open(db_path, opt).unwrap();
+        // db.put(b"test", b"nice");
         LevelDB { db }
     }
 

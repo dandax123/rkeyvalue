@@ -25,7 +25,7 @@ static mut STORAGE_SERVICE: Option<std::sync::Arc<Mutex<MasterAppData>>> = None;
 
 #[actix_web::main]
 async fn main() -> std::io::Result<()> {
-    let db = core::master::db::init_db("../testdb");
+    let db = core::master::db::LevelDB::new("../testdb");
     unsafe { STORAGE_SERVICE = Some(std::sync::Arc::new(Mutex::new(MasterAppData { db }))) };
 
     let args: Vec<String> = env::args().collect();
